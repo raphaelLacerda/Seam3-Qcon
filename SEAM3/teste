@@ -1,0 +1,2 @@
+Tip
+Any input stream injected, or created directly by the ResourceProvider is managed, and will be automatically closed when the bean declaring the injection point of the resource or provider is destroyed.

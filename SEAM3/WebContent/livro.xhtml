@@ -1,0 +1,25 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets">
+
+<ui:composition template="layout/template.xhtml">
+
+	<h:messages/>
+	<ui:define name="head">Livro</ui:define>
+	<ui:define name="body">
+
+		<h:outputText value="#{livroMB.livro}" />
+		<h:outputText value="meu flash livro #{flash.livroFlash}" />
+
+		<h:form>
+
+			<h:commandButton value="Monta Livro" action="#{livroMB.montaLivro}" />
+			<h:commandButton value="Atualiza" action="#{livroMB.atualiza('Rafa')}" />
+		</h:form>
+
+	</ui:define>
+</ui:composition>
+
+</html>
