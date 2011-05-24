@@ -1,4 +1,5 @@
 package br.com.qcon.util;
+
 import javax.enterprise.context.RequestScoped;
 import javax.enterprise.inject.Produces;
 import javax.persistence.EntityManagerFactory;
@@ -9,7 +10,7 @@ public class JPAUtil {
 
 	@ExtensionManaged
 	@Produces
-	@PersistenceUnit
+	@PersistenceUnit(unitName = "notas")
 	//	@SessionScoped
 	@RequestScoped
 	EntityManagerFactory	producerField;
