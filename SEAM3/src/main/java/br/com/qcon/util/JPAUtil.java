@@ -1,5 +1,4 @@
 package br.com.qcon.util;
-
 import javax.enterprise.context.RequestScoped;
 import javax.enterprise.inject.Produces;
 import javax.persistence.EntityManagerFactory;
