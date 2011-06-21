@@ -1,34 +1,36 @@
 package br.com.qcon.controller;
 
-import java.io.Serializable;
+import javax.enterprise.context.RequestScoped;
 import javax.enterprise.inject.Model;
-import javax.faces.context.Flash;
+import javax.faces.context.FacesContext;
 import javax.inject.Inject;
-import org.jboss.seam.solder.core.Requires;
+import javax.inject.Named;
+import javax.persistence.EntityManager;
 import br.com.qcon.model.Endereco;
 import br.com.qcon.model.Livro;
 
-//N‹o funfou
-//@RenderScoped
-//@Named
 @Model
-@Requires(value = "Flash")
-public class LivroMB implements Serializable {
+public class LivroMB {
 
-	private static final long	serialVersionUID	= 1L;
-	private Livro				livro				= new Livro();
-	private Endereco			endereco			= new Endereco();
+	private Livro			livro		= new Livro();
+	private Endereco		endereco	= new Endereco();
+
+	//	@Inject
+	//	private Flash				flash;
 
 	@Inject
-	private Flash				flash;
+	private FacesContext	facesContext;
+	@Inject
+	private EntityManager	em;
 
 	//testar JBoSS EL
 	public void montaLivro() {
 
 		livro = new Livro("Livro do Rafa");
 
-		flash.putNow("livroFlash", livro);
-		flash.keep("livroFlash");
+		//		flash.putNow("livroFlash", livro);
+		//		flash.keep("livroFlash");
+		facesContext.getExternalContext().getFlash().setKeepMessages(true);
 	}
 
 	public void atualiza(String a) {
@@ -51,5 +53,6 @@ public class LivroMB implements Serializable {
 	public void buscaLivro() {
 
 		System.out.println("indo buscar o livro" + livro.getId());
+		this.livro = em.find(Livro.class, livro.getId());
 	}
 }

@@ -10,7 +10,7 @@ public class JPAUtil {
 
 	@ExtensionManaged
 	@Produces
-	@PersistenceUnit(unitName = "notas")
+	@PersistenceUnit
 	//	@SessionScoped
 	@RequestScoped
 	EntityManagerFactory	producerField;
