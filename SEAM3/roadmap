@@ -1,31 +1,31 @@
-Pontos que posso falar sobre além de CDI com Seam 3
+Pontos que posso falar sobre al√©m de CDI com Seam 3
 
-Nesta palestra discutiremos algumas questões inerentes à avaliação do Seam 3 aplicado em sistemas que usam JSF2 e CDI. 
-Primeiramente, veremos em linhas gerais o propósito do CDI e sua implementação referência Weld, os problemas que ele se propôs a solucionar. 
-Em seguida discutiremos sobre a nova versão da especificação JSF, considerando-os como principais ferramentas para 
-desenvolvimento de aplicações Web. Debateremos ainda sobre as dificuldades arquiteturais encontradas no seu uso: 
-falta de gerenciamento de transações (IoC), transação demarcardas X transação por request, testabilidade e problemas 
-básicos ainda encontrados no JSF2. Portanto, serão descritos três módulos do projeto Seam 3: Persitence, Solder e Faces.
-Finalmente concluiremos com alguns exemplos práticos utilizando a ferramenta para aprofundamento do conhecimento dos 
-problemas elicitados e uma breve discussão sobre futuros módulos discutidos na lista interna dos desenvolvedores como 
+Nesta palestra discutiremos algumas questes inerentes  avaliao do Seam 3 aplicado em sistemas que usam JSF2 e CDI. 
+Primeiramente, veremos em linhas gerais o propsito do CDI e sua implementao referncia Weld, os problemas que ele se props a solucionar. 
+Em seguida discutiremos sobre a nova verso da especificao JSF, considerando-os como principais ferramentas para 
+desenvolvimento de aplicaes Web. Debateremos ainda sobre as dificuldades arquiteturais encontradas no seu uso: 
+falta de gerenciamento de transaes (IoC), transao demarcardas X transao por request, testabilidade e problemas 
+bsicos ainda encontrados no JSF2. Portanto, sero descritos trs mdulos do projeto Seam 3: Persitence, Solder e Faces.
+Finalmente concluiremos comalguns exemplos prticos utilizando a ferramenta para aprofundamento do conhecimento dos 
+problemas elicitados e uma breve discusso sobre futuros mdulos discutidos na lista interna dos desenvolvedores como 
 o Seam Reports, Seam Cache e Seam Social.
 
 
 
 Jboss In Bossa
-Nesta palestra discutiremos algumas questões inerentes à avaliação do Seam 3 aplicado em aplicações que usam JSF2 e CDI.
- Primeiramente, veremos em linhas gerais o propósito do framework Seam 2 e os problemas que ele se propôs a solucionar. 
- Em seguida discutiremos sobre a nova versão da especificação JSF, criação da JSR 299 (CDI) e sua implementação referência Weld, 
- considerando-os como principais ferramentas para desenvolvimento de aplicações Web. Debateremos ainda sobre as dificuldades 
- encontradas no seu uso: falta de gerenciamento de transações (IoC) e problemas básicos ainda encontrados no JSF2. Portanto, são descritos 
- três módulos do projeto Seam 3: Persitence, Solder e Faces. Finalmente concluiremos com alguns exemplos práticos utilizando a ferramenta 
- para aprofundamento do conhecimento dos problemas elicitados e uma breve discussão sobre futuros módulos discutidos na lista interna dos 
+Nesta palestra discutiremos algumas questes inerentes  avaliao do Seam 3 aplicado em aplicaes que usam JSF2 e CDI.
+ Primeiramente, veremos em linhas gerais o propsito do framework Seam 2 e os problemas que ele se props a solucionar. 
+ Em seguida discutiremos sobre a nova verso da especificao JSF, criao da JSR 299 (CDI) e sua implementao referncia Weld, 
+ considerando-os como principais ferramentas para desenvolvimento de aplicaes Web. Debateremos ainda sobre as dificuldades 
+ encontradas no seu uso: falta de gerenciamento de transaes (IoC) e problemas bsicos ainda encontrados no JSF2. Portanto, so descritos 
+ trs mdulos do projeto Seam 3: Persitence, Solder e Faces. Finalmente concluiremos comalguns exemplos prticos utilizando a ferramenta 
+ para aprofundamento do conhecimento dos problemas elicitados e uma breve discusso sobre futuros mdulos discutidos na lista interna dos 
  desenvolvedores como o Seam Reports, Seam Cache e Seam Social.
 
 Mini
 
-Bacharel em Ciências da Computação e Pós-Graduado em Engenharia de Sistemas. Atua como Analista de Sistemas do Banco do Brasil desenvolvendo
-com Seam 2.X e ministra cursos na Caelum sobre temas como Seam 2 e 3, JSF2, CDI e JPA2. Possui as certificações SCJP 5.0 e SCWCD 5.0.
+Bacharel em Cincias da Computao e Ps-Graduado em Engenharia de Sistemas. Atua como Analista de Sistemas do Banco do Brasil desenvolvendo
+com Seam 2.X e ministra cursos na Caelum sobre temas como Seam 2 e 3, JSF2, CDI e JPA2. Possui as certificaes SCJP 5.0 e SCWCD 5.0.
 
 http://www.caelum.com.br/instrutores/raphael-lacerda/
 http://www.infoq.com/br/author/Raphael-Lacerda
@@ -160,24 +160,24 @@ especially around memory usage, with Weld 1.2 (which will be included in JBoss A
 				- problem 1: i need to implement this. I still have to manage my Transaction
 				- problem 2: 
 					e se o metodo do CDI chama outro. - REQUIRED - sempre NEW
-					e se anotar uma classe??? até getter é chamado
+					e se anotar uma classe??? at getter  chamado
 					will open another transaction if i call another method - REQUIRED NEW
 					
 				<interceptors>
-			      <class>org.jboss.seam.transaction.TransactionInterceptor</class>
-			   </interceptors>
+			<class>org.jboss.seam.transaction.TransactionInterceptor</class>
+			</interceptors>
 			
 				<t:SeSynchronizations>
-			         <s:modifies/>
-			    </t:SeSynchronizations>
+			<s:modifies/>
+			</t:SeSynchronizations>
 		
-		      <t:EntityTransaction>
-		         <s:modifies />
-		      </t:EntityTransaction>
+		<t:EntityTransaction>
+		<s:modifies/>
+		</t:EntityTransaction>
 					- Need to explain this
 		
 		
-			Vai usar JTA se estiver disponível - permite o Seam lidar manualmente - http://docs.jboss.org/seam/3/persistence/latest/reference/en-US/html/persistence.html#persistence.seam-managed-persistence-contexts
+			Vai usar JTA se estiver disponvel - permite o Seam lidar manualmente - http://docs.jboss.org/seam/3/persistence/latest/reference/en-US/html/persistence.html#persistence.seam-managed-persistence-contexts
 		
 			EntityTransaction X JTA - two phase commit
 		
@@ -187,7 +187,7 @@ especially around memory usage, with Weld 1.2 (which will be included in JBoss A
 			
 		-  HANDS ON
 		Citar apenas - dica rapida - colocar a figura de alguem correndo (gui?)
-			User user = em.createQuery("from User where username=#{user.username}").getSingleResult();
+			Useruser=em.createQuery("fromUserwhereusername=#{user.username}").getSingleResult();
 	
 	5 - Seam Faces
 		Problem 1: how to search for a book?
@@ -210,13 +210,13 @@ especially around memory usage, with Weld 1.2 (which will be included in JBoss A
 		injetar e escolher scopes nos validadores e conversores
 		
 		- HANDS ON
-		Dica Rápida: 
+		Dica Rpida: 
 			messages - saco colocar mensagens no FacesContext e mais saco ainda intercionalizar
 			@Inject FacesContext
 			@Inject Messages
 		
 	6 - SeamSolder
-		- Explicar que é dividida em 3 partes
+		- Explicar que  dividida em 3 partes
 		
 			Seam Solder is a library of Generally Useful Stuff (tm), particularly if you are developing an application 
 			based on CDI (JSR-299 Java Contexts and Dependency Injection), or a CDI based library or framework.
@@ -232,10 +232,10 @@ especially around memory usage, with Weld 1.2 (which will be included in JBoss A
 			@Resource
 			ServletLifecycle.getServletContext().getRealPath("xml/atividades.xml");
 			X
-			Como testar isso????? mocar! mas como moco? manipulação de bytecode… powermockito
+			Como testar isso????? mocar! mas como moco? manipulao de bytecode powermockito
 			@Inject
 			@Resource("WEB-INF/web.xml")
-			InputStream webXml
+			InputStreamwebXml
 
 				Any input stream injected, or created directly by the ResourceProvider is managed, and will be automatically
 				closed when the bean declaring the injection point of the resource or provider is destroyed.xAny input stream injected,
@@ -243,7 +243,7 @@ especially around memory usage, with Weld 1.2 (which will be included in JBoss A
 				injection point of the resource or provider is destroyed.
 				
 		- HANDS ON
-		Dica rápida - @Inject Expressions - invocando método
+		Dica rpida - @Inject Expressions - invocando mtodo
 
 
 	7 - CDI's future
@@ -267,7 +267,7 @@ especially around memory usage, with Weld 1.2 (which will be included in JBoss A
 
 	8 - Seam's Future
 
-#seam-dev on irc.freenode.net - discussão sobre packing - 25/05
+#seam-dev on irc.freenode.net - discusso sobre packing - 25/05
 
 
 seam-dev@lists.jboss.org
