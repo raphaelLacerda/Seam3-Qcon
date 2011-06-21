@@ -1,0 +1,294 @@
+Pontos que posso falar sobre além de CDI com Seam 3
+
+Nesta palestra discutiremos algumas questões inerentes à avaliação do Seam 3 aplicado em sistemas que usam JSF2 e CDI. 
+Primeiramente, veremos em linhas gerais o propósito do CDI e sua implementação referência Weld, os problemas que ele se propôs a solucionar. 
+Em seguida discutiremos sobre a nova versão da especificação JSF, considerando-os como principais ferramentas para 
+desenvolvimento de aplicações Web. Debateremos ainda sobre as dificuldades arquiteturais encontradas no seu uso: 
+falta de gerenciamento de transações (IoC), transação demarcardas X transação por request, testabilidade e problemas 
+básicos ainda encontrados no JSF2. Portanto, serão descritos três módulos do projeto Seam 3: Persitence, Solder e Faces.
+Finalmente concluiremos com alguns exemplos práticos utilizando a ferramenta para aprofundamento do conhecimento dos 
+problemas elicitados e uma breve discussão sobre futuros módulos discutidos na lista interna dos desenvolvedores como 
+o Seam Reports, Seam Cache e Seam Social.
+
+
+
+Jboss In Bossa
+Nesta palestra discutiremos algumas questões inerentes à avaliação do Seam 3 aplicado em aplicações que usam JSF2 e CDI.
+ Primeiramente, veremos em linhas gerais o propósito do framework Seam 2 e os problemas que ele se propôs a solucionar. 
+ Em seguida discutiremos sobre a nova versão da especificação JSF, criação da JSR 299 (CDI) e sua implementação referência Weld, 
+ considerando-os como principais ferramentas para desenvolvimento de aplicações Web. Debateremos ainda sobre as dificuldades 
+ encontradas no seu uso: falta de gerenciamento de transações (IoC) e problemas básicos ainda encontrados no JSF2. Portanto, são descritos 
+ três módulos do projeto Seam 3: Persitence, Solder e Faces. Finalmente concluiremos com alguns exemplos práticos utilizando a ferramenta 
+ para aprofundamento do conhecimento dos problemas elicitados e uma breve discussão sobre futuros módulos discutidos na lista interna dos 
+ desenvolvedores como o Seam Reports, Seam Cache e Seam Social.
+
+Mini
+
+Bacharel em Ciências da Computação e Pós-Graduado em Engenharia de Sistemas. Atua como Analista de Sistemas do Banco do Brasil desenvolvendo
+com Seam 2.X e ministra cursos na Caelum sobre temas como Seam 2 e 3, JSF2, CDI e JPA2. Possui as certificações SCJP 5.0 e SCWCD 5.0.
+
+http://www.caelum.com.br/instrutores/raphael-lacerda/
+http://www.infoq.com/br/author/Raphael-Lacerda
+http://blog.caelum.com.br/author/lacerdaph/	
+http://qconsp.com/palestra/raphael-lacerda/alem-do-cdi-com-seam-3
+
+
+
+
+
+
+
+
+http://www.infoq.com/news/2011/02/muir_seam3
+
+http://torquebox.org/news/2011/06/13/torquebox-a-javaists-tutorial-on-messaging-services-and-cdi-in-ruby/
+
+migration notes - http://seamframework.org/Seam3/Seam2ToSeam3MigrationNotes
+
+http://download.oracle.com/javaee/6/tutorial/doc/gjivm.html
+
+http://hwellmann.blogspot.com/2010/11/cdi-major-risk-factor-in-java-ee-6.html
+http://hwellmann.blogspot.com/2010/12/glassfish-and-weld-new-builds-new-bugs.html 
+http://hwellmann.blogspot.com/2010/12/update-on-memory-issues-in-glassfish.html- problems
+
+http://relation.to/Bloggers/Seam300FinalReleased
+
+http://www.seamframework.org/Seam3/Compatibility - glassFish
+
+http://seamframework.org/Community/Seam23MigrationHowToStart - how to start migration
+
+http://relation.to/18358.lace - Conversation with CDI
+
+Conversation Problems -
+
+The problem was the spec, from what I've understood they couldn't all agree on how to treat some of the features 
+from Seam 2. Currently you can only have one conversation going at a time per session, and there is no nesting of 
+conversations. I believe the Seam Conversation module though address many of these issues.
+
+
+
+
+
+SLIDES
+
+
+	1 - CDI - example
+		- CDI Architecture risks
+			2010 - test were no that good for seam
+			december - still bugs when i deploy
+			november - http://lists.jboss.org/pipermail/weld-dev/2010-November/002746.html
+			2010/2011 - update - no problems with heap - it's improving
+			
+Glassfish Version		Total Heap	Shallow	Retained	Percentage
+	3.0.1				412.1 MB	84.680	378.215.056	87.52 %
+	3.1-b26				335.3 MB	85.144	205.527.048	58.38 %
+	3.1-b33				149.6 MB	84.216	7.041.704	4.49 %
+
+The retained heap of an object is the set of objects that will be garbage collected when the given parent 
+object is garbage collected.
+			
+			2011 - february interview with Pete Muir
+			
+			- HARALD WELLMANN - job done: dec, 2010
+			In retrospective, I do not regret this decision, but I had to spend a significant amount of time analyzing and debugging platform problems. 
+			Based on this experience with Java EE 6, which may not be representative of course, the only advice I can give is: When Java EE 7 is released, 
+			wait a year or two before using it for production, unless you have the time and resources to act as beta tester.
+			The Java EE 6 specifications were released in December 2009, together with Glassfish v3, the first "production-quality release" of a Java EE 6 server. 
+			"Marketing release" would have been more appropriate, since going by the number of bugs in Glassfish 3.0, the main driving factor for the release date 
+			was quite obviously not a quality benchmark, but simply the need for Sun as the Java EE champion to release a working server simultaneously with the 
+			specifications.
+			
+			
+			However, for my project, CDI in the guise of Weld, its reference implementation, turned out to be the largest single source of problems. 
+			In addition to a number of functional bugs where injection would not work in certain scenarios, there are at least two severe memory issues:
+				- Weld causes memory leaks on application redeployment.
+					https://glassfish.dev.java.net/issues/show_bug.cgi?id=12368
+				- Even in the first deployment of an application, Weld uses enormous amounts of memory.
+			
+			The test was made in windows e ubuntu
+			
+			
+			WishList
+			
+			All in all, if you want to work with Java EE 6, there is currently no way around Weld. And until Weld reaches production quality, 
+			the only way to build production quality applications on Java EE 6 is to avoid using CDI.
+
+			Free and Open Source Software is all about choice - so I would really love to see a pluggable CDI provider interface that would 
+			allow users to work with Glassfish and some CDI implementation other than Weld.
+
+			The second best solution might be to join forces from different CDI project to make Weld stable enough for production usage.
+
+			The third option would be another fully Java EE 6 compliant Open Source server (maybe Geronimo?) not including Weld.
+
+			No idea if any of these options is realistic, but this is on my wishlist for 2011.
+
+
+
+	I'm glad to say we made a lot of progress! We saw improvements in memory usage, boot time and runtime performance. 
+	Our measurements showed a two fold improvement in boot time with just a few beans in the deployment, but with many beans, 
+	we were showing more than a 10 fold improvement. Memory usage had a consistent 4 fold improvement, regardless of the number of beans deployed. 
+	There was a 40% improvement in runtime performance, and we saw that Weld performs as well as, or better than other CDI implementations available, 
+	as well as other solutions in the DI space.
+These improvements are all included in Weld 1.1.0 (which is included in JBoss AS 6 and GlassFish 3.1), and we do plan further improvements, 
+especially around memory usage, with Weld 1.2 (which will be included in JBoss AS 7). The eventual aim is for Weld to use around 1k per bean.
+
+
+	2 - JSF 2 - example
+		- Some new features: h:link, f:metadata, ViewScope, @ManagedBean, FlashScope
+	3 - Seam 3 Integration
+		- Show a picture - http://seamframework.org/Seam3/Architecture
+	4 - Seam Persistence
+		Problem 1: How to Save an Book?
+		- I need an Entity Manager
+			- Show JPAUtil with CDI
+				- With CDI, it's better - but its not good yet
+					@Inject EntityManager
+				- Architecture Problem: I need to worry how this guy (EMF) is gonna be a Singleton!
+					@ExtensionManaged
+					@Produces
+					@PersistenceUnit // you can choose unit name here, then you can use a qualifier if you want another EntityManager
+					@ConversationScoped
+					EntityManagerFactory producerField;
+					
+		- Now i need a Transaction
+			- Transaction on demand X Unit Of Work
+				Unit Of Work - filters, proxys, Servlet API - not very integrated with CDI
+				Transaction on demand - maybe it's better, buuuuuuuuttttttt....
+				hibrid way
+			- I need IoC - something like EJB's way!
+			- Interceptors
+				- problem 1: i need to implement this. I still have to manage my Transaction
+				- problem 2: 
+					e se o metodo do CDI chama outro. - REQUIRED - sempre NEW
+					e se anotar uma classe??? até getter é chamado
+					will open another transaction if i call another method - REQUIRED NEW
+					
+				<interceptors>
+			      <class>org.jboss.seam.transaction.TransactionInterceptor</class>
+			   </interceptors>
+			
+				<t:SeSynchronizations>
+			         <s:modifies/>
+			    </t:SeSynchronizations>
+		
+		      <t:EntityTransaction>
+		         <s:modifies />
+		      </t:EntityTransaction>
+					- Need to explain this
+		
+		
+			Vai usar JTA se estiver disponível - permite o Seam lidar manualmente - http://docs.jboss.org/seam/3/persistence/latest/reference/en-US/html/persistence.html#persistence.seam-managed-persistence-contexts
+		
+			EntityTransaction X JTA - two phase commit
+		
+		
+			- @Transactional suporta tbm @TransactionAttribute
+			- REquires_new e notSupported nao funciona
+			
+		-  HANDS ON
+		Citar apenas - dica rapida - colocar a figura de alguem correndo (gui?)
+			User user = em.createQuery("from User where username=#{user.username}").getSingleResult();
+	
+	5 - Seam Faces
+		Problem 1: how to search for a book?
+			- book.xhtml?id=3			
+			- The complain - not bookmarkble
+			
+			JSF employs an event-oriented architecture. Listeners are invoked in response to user-interface events, 
+			such as the user clicking on a button or changing the value of a form input. Unfortunately, the most important
+			 event on the web, a URL request (initiated by the user clicking on a link, entering a URL into the browser's 
+			 location bar or selecting a bookmark), has long been overlooked in JSF. Historically, listeners have exclusively 
+			 been activated on postback, which has led to the common complaint that in JSF, "everything is a POST."
+		
+			- JSF2 :  Some GET support was added to JSF 2.0 with the introduction of view parameters 
+			and the pre-render view event.	 			
+			- I need more, rest/ friendly url: SEAM3/search/1
+				viewAction - fazer redirect para livro nao encontrado, com jsf puro nao rola
+		
+		Problem 2: How to validate two fields at the same time?
+			- password and confirm password -> they must be equal
+		injetar e escolher scopes nos validadores e conversores
+		
+		- HANDS ON
+		Dica Rápida: 
+			messages - saco colocar mensagens no FacesContext e mais saco ainda intercionalizar
+			@Inject FacesContext
+			@Inject Messages
+		
+	6 - SeamSolder
+		- Explicar que é dividida em 3 partes
+		
+			Seam Solder is a library of Generally Useful Stuff (tm), particularly if you are developing an application 
+			based on CDI (JSR-299 Java Contexts and Dependency Injection), or a CDI based library or framework.
+
+			@Veto
+			@Requires
+			@Exact - alternativa para os qualifiers
+			@Named no package
+			@FullyQualifiedNamed
+
+		Problem 1: How to get a file?
+		
+			@Resource
+			ServletLifecycle.getServletContext().getRealPath("xml/atividades.xml");
+			X
+			Como testar isso????? mocar! mas como moco? manipulação de bytecode… powermockito
+			@Inject
+			@Resource("WEB-INF/web.xml")
+			InputStream webXml
+
+				Any input stream injected, or created directly by the ResourceProvider is managed, and will be automatically
+				closed when the bean declaring the injection point of the resource or provider is destroyed.xAny input stream injected,
+				or created directly by the ResourceProvider is managed, and will be automatically closed when the bean declaring the 
+				injection point of the resource or provider is destroyed.
+				
+		- HANDS ON
+		Dica rápida - @Inject Expressions - invocando método
+
+
+	7 - CDI's future
+	
+		E.G - Peter Muir - moved - http://www.jboss.org/infinispan - hibernate OGM
+		CDI - 1.1
+ 			- Problemas que ja sabiam mas nao tiveram tempo para consertar e os unexpected issues
+ 			- stardilize extensions plugins that the community has build
+			I will be leading the EG for CDI 1.1 - in fact I've just finished the first draft of the JSR proposal and am collecting feedback before it is made public. We feel that CDI 1.0 has had a very positive reception in the community, and that in general people are able to achieve what they need with the current functionality. However, there are a few minor rough spots; these fall into two categories - there are those that we knew about when we released CDI 1.0, but because we didn't have time to explore the correct solution left for a later date, and, of course, some unexpected issues. CDI 1.1 aims to address these rough spots, as well as to standardize a few of the most popular extensions the community has built. We don't plan to add any major new areas of functionality. A few of the things you can expect include:
+			Global ordering of interceptors and decorators, as well as global enablement of alternatives
+			An API for managing built in contexts, allowing the built in implementation of the conversation context to be used outside of JSF
+			An embedded mode allowing startup outside of a Java EE container
+			Bean declaration at constructor level
+			Static injection
+			Inclusion of @Unwraps from Seam Solder
+			Numerous minor enhancements to the Portable Extensions SPI
+			Client controlled contexts
+			Better support for CDI in libraries when used in the Java EE platform
+			Send CDI events for Servlet events
+			Application lifecycle events
+
+	8 - Seam's Future
+
+#seam-dev on irc.freenode.net - discussão sobre packing - 25/05
+
+
+seam-dev@lists.jboss.org
+Seam Reports, Seam Cache, Seam Social
+
+Hello,
+
+I would like to propose a new module on Seam: Seam Cache.
+
+That module would be JSR-107 compatible (essentially Infinispan and EhCache) and would allow to:
+
+1) @Inject Cache cache;
+2) Provide a new scope @CacheScoped(regionName="xx"). That would live for the time of the cache configured by the region name itself.
+
+The module should be tested on Inifinispan and EhCache.
+
+What do you guys think ?
+
+Regards,
+
+		Gavin King (Project Founder)
+		Shane Bryzak (Project Lead)
+		Pete Muir (former Project Lead)
+		Dan Allen (Community Liaison)
