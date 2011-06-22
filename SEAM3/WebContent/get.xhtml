@@ -7,15 +7,17 @@
 
 <ui:composition template="layout/template.xhtml">
 
-	<ui:define name="head">Livro</ui:define>
+	<ui:define name="head">Livro22222</ui:define>
 	<ui:define name="body">
 
 		<f:metadata>
 
 			<f:viewParam name="id" value="#{livroMB.livro.id}" />
 
-			<s:viewAction action="#{livroMB.buscaLivro}" />
-
+			<ui:remove>
+				<s:viewAction action="#{livroMB.buscaLivro}" />
+			</ui:remove>
+			<f:event type="preRenderView" listener="#{livroMB.buscaLivro}" />
 		</f:metadata>
 		
 		Livro encontrando #{livroMB.livro.id} - #{livroMB.livro.nome}

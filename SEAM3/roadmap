@@ -39,34 +39,6 @@ http://qconsp.com/palestra/raphael-lacerda/alem-do-cdi-com-seam-3
 
 
 
-http://www.infoq.com/news/2011/02/muir_seam3
-
-http://torquebox.org/news/2011/06/13/torquebox-a-javaists-tutorial-on-messaging-services-and-cdi-in-ruby/
-
-migration notes - http://seamframework.org/Seam3/Seam2ToSeam3MigrationNotes
-
-http://download.oracle.com/javaee/6/tutorial/doc/gjivm.html
-
-http://hwellmann.blogspot.com/2010/11/cdi-major-risk-factor-in-java-ee-6.html
-http://hwellmann.blogspot.com/2010/12/glassfish-and-weld-new-builds-new-bugs.html 
-http://hwellmann.blogspot.com/2010/12/update-on-memory-issues-in-glassfish.html- problems
-
-http://relation.to/Bloggers/Seam300FinalReleased
-
-http://www.seamframework.org/Seam3/Compatibility - glassFish
-
-http://seamframework.org/Community/Seam23MigrationHowToStart - how to start migration
-
-http://relation.to/18358.lace - Conversation with CDI
-
-Conversation Problems -
-
-The problem was the spec, from what I've understood they couldn't all agree on how to treat some of the features 
-from Seam 2. Currently you can only have one conversation going at a time per session, and there is no nesting of 
-conversations. I believe the Seam Conversation module though address many of these issues.
-
-
-
 
 
 SLIDES
@@ -74,18 +46,19 @@ SLIDES
 
 	1 - CDI - example
 		- CDI Architecture risks
-			2010 - test were no that good for seam
+		
+			2010 - tests were no that good for Seam
 			december - still bugs when i deploy
 			november - http://lists.jboss.org/pipermail/weld-dev/2010-November/002746.html
 			2010/2011 - update - no problems with heap - it's improving
 			
-Glassfish Version		Total Heap	Shallow	Retained	Percentage
-	3.0.1				412.1 MB	84.680	378.215.056	87.52 %
-	3.1-b26				335.3 MB	85.144	205.527.048	58.38 %
-	3.1-b33				149.6 MB	84.216	7.041.704	4.49 %
-
-The retained heap of an object is the set of objects that will be garbage collected when the given parent 
-object is garbage collected.
+			Glassfish Version		Total Heap	Shallow	Retained	Percentage
+				3.0.1				412.1 MB	84.680	378.215.056	87.52 %
+				3.1-b26				335.3 MB	85.144	205.527.048	58.38 %
+				3.1-b33				149.6 MB	84.216	7.041.704	4.49 %
+			
+			The retained heap of an object is the set of objects that will be garbage collected when the given parent 
+			object is garbage collected.
 			
 			2011 - february interview with Pete Muir
 			
@@ -138,7 +111,7 @@ especially around memory usage, with Weld 1.2 (which will be included in JBoss A
 	3 - Seam 3 Integration
 		- Show a picture - http://seamframework.org/Seam3/Architecture
 	4 - Seam Persistence
-		Problem 1: How to Save an Book?
+		Problem 1: How to Save a Book?
 		- I need an Entity Manager
 			- Show JPAUtil with CDI
 				- With CDI, it's better - but its not good yet
@@ -168,25 +141,25 @@ especially around memory usage, with Weld 1.2 (which will be included in JBoss A
 			</interceptors>
 			
 				<t:SeSynchronizations>
-			<s:modifies/>
-			</t:SeSynchronizations>
+					<s:modifies/>
+				</t:SeSynchronizations>
 		
-		<t:EntityTransaction>
-		<s:modifies/>
-		</t:EntityTransaction>
+				<t:EntityTransaction>
+					<s:modifies/>
+				</t:EntityTransaction>
 					- Need to explain this
-		
-		
-			Vai usar JTA se estiver disponvel - permite o Seam lidar manualmente - http://docs.jboss.org/seam/3/persistence/latest/reference/en-US/html/persistence.html#persistence.seam-managed-persistence-contexts
-		
-			EntityTransaction X JTA - two phase commit
-		
 		
 			- @Transactional suporta tbm @TransactionAttribute
 			- REquires_new e notSupported nao funciona
+				- it was supposed to work on final version 1.0.0, but not!
+				
+			Vai usar JTA se estiver disponvel - permite o Seam lidar manualmente - 
+			http://docs.jboss.org/seam/3/persistence/latest/reference/en-US/html/persistence.html#persistence.seam-managed-persistence-contexts
+		
+			- EntityTransaction X JTA - two phase commit -> what i'll say here???/
 			
 		-  HANDS ON
-		Citar apenas - dica rapida - colocar a figura de alguem correndo (gui?)
+			Citar apenas - dica rapida - colocar a figura de alguem correndo (eu?moreira? gui?)
 			Useruser=em.createQuery("fromUserwhereusername=#{user.username}").getSingleResult();
 	
 	5 - Seam Faces
@@ -201,10 +174,28 @@ especially around memory usage, with Weld 1.2 (which will be included in JBoss A
 			 been activated on postback, which has led to the common complaint that in JSF, "everything is a POST."
 		
 			- JSF2 :  Some GET support was added to JSF 2.0 with the introduction of view parameters 
-			and the pre-render view event.	 			
-			- I need more, rest/ friendly url: SEAM3/search/1
+			and the pre-render view event.
+			
+				<f:event type="preRenderView" listener="#{livroMB.buscaLivro}" />
+								X	 			
+				<s:viewAction action="#{livroMB.buscaLivro}" />
+				
+				Advantages: 
+					It's lightweight	
+					It's timing can be controlled
+					It's contextual
+					It can trigger navigation
 				viewAction - fazer redirect para livro nao encontrado, com jsf puro nao rola
+			- I need more, rest/ friendly url: SEAM3/search/1
+				
 		
+		
+		Warning
+			The JSF 2 specification specifies that there must be at least one view parameter for the view metadata 
+			facet to be processed on an initial request. This requirement was introduced into the JSF specification inadvertently. 
+			But not to worry. Seam Faces inserts a placeholder view parameter into the view metadata if it contains other components 
+			but no view parameters. That means you can use a view action without a view parameter, contrary to the JSF specification.
+			
 		Problem 2: How to validate two fields at the same time?
 			- password and confirm password -> they must be equal
 		injetar e escolher scopes nos validadores e conversores
@@ -252,7 +243,13 @@ especially around memory usage, with Weld 1.2 (which will be included in JBoss A
 		CDI - 1.1
  			- Problemas que ja sabiam mas nao tiveram tempo para consertar e os unexpected issues
  			- stardilize extensions plugins that the community has build
-			I will be leading the EG for CDI 1.1 - in fact I've just finished the first draft of the JSR proposal and am collecting feedback before it is made public. We feel that CDI 1.0 has had a very positive reception in the community, and that in general people are able to achieve what they need with the current functionality. However, there are a few minor rough spots; these fall into two categories - there are those that we knew about when we released CDI 1.0, but because we didn't have time to explore the correct solution left for a later date, and, of course, some unexpected issues. CDI 1.1 aims to address these rough spots, as well as to standardize a few of the most popular extensions the community has built. We don't plan to add any major new areas of functionality. A few of the things you can expect include:
+			I will be leading the EG for CDI 1.1 - in fact I've just finished the first draft of the JSR proposal and am collecting 
+			feedback before it is made public. We feel that CDI 1.0 has had a very positive reception in the community, and that 
+			in general people are able to achieve what they need with the current functionality. However, there are a few minor rough spots; 
+			these fall into two categories - there are those that we knew about when we released CDI 1.0, but because we didn't have time to 
+			explore the correct solution left for a later date, and, of course, some unexpected issues. CDI 1.1 aims to address these rough spots,
+			 as well as to standardize a few of the most popular extensions the community has built. We don't plan to add any major 
+			new areas of functionality. A few of the things you can expect include:
 			Global ordering of interceptors and decorators, as well as global enablement of alternatives
 			An API for managing built in contexts, allowing the built in implementation of the conversation context to be used outside of JSF
 			An embedded mode allowing startup outside of a Java EE container
@@ -267,12 +264,39 @@ especially around memory usage, with Weld 1.2 (which will be included in JBoss A
 
 	8 - Seam's Future
 
+		- Seam Reports, 
+		Seam Cache - https://github.com/gastaldi/seam-cache
+		Seam Social	
+		- https://issues.jboss.org/browse/SEAMCRON-21
+		
+
+		Gavin King (Project Founder)
+		Shane Bryzak (Project Lead)
+		Pete Muir (former Project Lead)
+		Dan Allen (Community Liaison)
+	
+	9 - Links Interessantes, github do projeto e pdf
+
+		
+		
 #seam-dev on irc.freenode.net - discusso sobre packing - 25/05
 
 
 seam-dev@lists.jboss.org
-Seam Reports, Seam Cache, Seam Social
 
+
+rom	Jason Porter lightguard.jp@gmail.com
+to	George Gastaldi <gastaldi@apache.org>
+cc	Seam Dev List <seam-dev@lists.jboss.org>
+date	Mon, Apr 11, 2011 at 5:49 PM
+subject	Re: [seam-dev] Proposal for a new module
+mailing list	seam-dev.lists.jboss.org Filter messages from this mailing list
+mailed-by	lists.jboss.org
+unsubscribe	Unsubscribe from this mailing-list
+hide details Apr 11
+Create it on your github, if we all agree to pull it in, we'll fork then use the seam fork as the master.
+
+On Mon, Apr 11, 2011 at 14:41, George Gastaldi <gastaldi@apache.org> wrote:
 Hello,
 
 I would like to propose a new module on Seam: Seam Cache.
@@ -288,7 +312,95 @@ What do you guys think ?
 
 Regards,
 
-		Gavin King (Project Founder)
-		Shane Bryzak (Project Lead)
-		Pete Muir (former Project Lead)
-		Dan Allen (Community Liaison)
+George
+
+Pete already started work on this [1] (built on top of the Infinispan integration that he wrote as part of the Seam Cloud module), however we decided that it would be better as an integration project under the Infinispan umbrella [2].  If you'd like to contribute to this, I suggest that you contact him directly to coordinate efforts.
+
+[1] https://issues.jboss.org/browse/SEAM-45
+[2] https://issues.jboss.org/browse/ISPN-996
+
+Shane
+
+
+----------------
+----------------
+
+
+
+
+from	Shane Bryzak sbryzak@redhat.com
+to	"seam-dev@lists.jboss.org" <seam-dev@lists.jboss.org>
+date	Tue, Jun 21, 2011 at 8:23 PM
+subject	[seam-dev] Seam 3.1 Release Schedule
+mailing list	seam-dev.lists.jboss.org Filter messages from this mailing list
+mailed-by	lists.jboss.org
+unsubscribe	Unsubscribe from this mailing-list
+hide details 8:23 PM (21 minutes ago)
+
+Team,
+
+Here are the tentative release that we are aiming at for the Seam 3.1
+release:
+
+August 12 - 3.1 Beta1
+September 2 - 3.1 CR1
+September 30 - 3.1 Final
+
+We may have additional beta releases between Beta1 and CR1 if required,
+likewise there may be additional CR releases if QA requests them.  In
+addition to the modules that are already a part of Seam 3.0, the plan is
+to also include the following new modules:
+
+Seam Cron
+Seam JMS
+Seam JCR
+Seam Mail
+Seam Reports
+Seam Social
+Seam Transactions (split from Seam Persistence)
+
+Module leads for these new modules, can you please let me know if you
+anticipate any problems with the above release dates.
+
+Shane
+
+
+
+
+
+
+
+		
+		
+Palestra Links interessantes
+
+
+http://www.infoq.com/news/2011/02/muir_seam3
+
+http://torquebox.org/news/2011/06/13/torquebox-a-javaists-tutorial-on-messaging-services-and-cdi-in-ruby/
+
+migration notes - http://seamframework.org/Seam3/Seam2ToSeam3MigrationNotes
+
+http://download.oracle.com/javaee/6/tutorial/doc/gjivm.html
+
+http://hwellmann.blogspot.com/2010/11/cdi-major-risk-factor-in-java-ee-6.html
+http://hwellmann.blogspot.com/2010/12/glassfish-and-weld-new-builds-new-bugs.html 
+http://hwellmann.blogspot.com/2010/12/update-on-memory-issues-in-glassfish.html- problems
+
+http://relation.to/Bloggers/Seam300FinalReleased
+
+http://www.seamframework.org/Seam3/Compatibility - glassFish
+
+http://seamframework.org/Community/Seam23MigrationHowToStart - how to start migration
+
+http://relation.to/18358.lace - Conversation with CDI
+
+Conversation Problems -
+
+The problem was the spec, from what I've understood they couldn't all agree on how to treat some of the features 
+from Seam 2. Currently you can only have one conversation going at a time per session, and there is no nesting of 
+conversations. I believe the Seam Conversation module though address many of these issues.
+
+
+
+		
