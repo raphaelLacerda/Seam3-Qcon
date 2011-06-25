@@ -13,7 +13,7 @@ public class JPAUtil {
 	@PersistenceUnit(unitName = "seam3")
 	//	@SessionScoped
 	@RequestScoped
-	EntityManagerFactory	producerField;
+	EntityManagerFactory	entityManagerFactory;
 
 	/* This is just an ordinary resource producer field as defined by the CDI
 	 * specification, however the presence of the @ExtensionManaged annotation

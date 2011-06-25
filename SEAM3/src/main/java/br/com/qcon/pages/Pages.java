@@ -9,8 +9,12 @@ public interface Pages {
 
 	static enum Pages1 {
 
-		@UrlMapping(pattern = "/busca/livro/#{id}")
-		@ViewPattern("/livro.xhtml")
-		LIVRO;
+		@ViewPattern("/get.xhtml")
+		@UrlMapping(pattern = "/pesquisa/#{id}")
+		LIVRO,
+
+		@ViewPattern("/index.xhtml")
+		@UrlMapping(pattern = "/home")
+		PRINCIPAL;
 	}
 }

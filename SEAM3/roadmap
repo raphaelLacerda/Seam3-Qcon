@@ -1,3 +1,4 @@
+
 Pontos que posso falar sobre além de CDI com Seam 3
 
 Nesta palestra discutiremos algumas questes inerentes  avaliao do Seam 3 aplicado em sistemas que usam JSF2 e CDI. 
@@ -37,7 +38,11 @@ http://qconsp.com/palestra/raphael-lacerda/alem-do-cdi-com-seam-3
 
 
 
-
+- Apresentação
+	-- BM
+	-- Bruno Borges after me - hates JSF - 10 reasons why you shoudn't pick for JSF
+	-- The presentation is done since may - where is gui? probably making his presentation
+	-- Special Thanks
 
 
 
@@ -158,8 +163,8 @@ especially around memory usage, with Weld 1.2 (which will be included in JBoss A
 		
 			- EntityTransaction X JTA - two phase commit -> what i'll say here???/
 			
-		-  HANDS ON
-			Citar apenas - dica rapida - colocar a figura de alguem correndo (eu?moreira? gui?)
+		-	HANDS ON
+		-	Citar apenas - dica rapida - colocar a figura de alguem correndo (eu?moreira? gui?)
 			Useruser=em.createQuery("fromUserwhereusername=#{user.username}").getSingleResult();
 	
 	5 - Seam Faces
@@ -187,8 +192,8 @@ especially around memory usage, with Weld 1.2 (which will be included in JBoss A
 					It can trigger navigation
 				viewAction - fazer redirect para livro nao encontrado, com jsf puro nao rola
 			- I need more, rest/ friendly url: SEAM3/search/1
-				
-		
+				https://issues.jboss.org/browse/SEAMFACES-158
+				https://github.com/seam/faces/pull/26				
 		
 		Warning
 			The JSF 2 specification specifies that there must be at least one view parameter for the view metadata 
@@ -196,16 +201,37 @@ especially around memory usage, with Weld 1.2 (which will be included in JBoss A
 			But not to worry. Seam Faces inserts a placeholder view parameter into the view metadata if it contains other components 
 			but no view parameters. That means you can use a view action without a view parameter, contrary to the JSF specification.
 			
-		Problem 2: How to validate two fields at the same time?
+		Problem 2: 	How to validate two fields at the same time?
+					How to validate if an user already exists? - I need to go to the DataBase
 			- password and confirm password -> they must be equal
-		injetar e escolher scopes nos validadores e conversores
+				Inject and choose scopes for Converters e Validators
 		
-		- HANDS ON
-		Dica Rpida: 
-			messages - saco colocar mensagens no FacesContext e mais saco ainda intercionalizar
+		-	HANDS ON
+		-	Fast Tip:
+		 
+			@Inject Messages - keeps even after a redirect by default
 			@Inject FacesContext
-			@Inject Messages
+			
+			javax.faces.context.FacesContext	
+			public class Bean {
+			   @Inject FacesContext context;
+			}
+			javax.faces.context.ExternalContext	
+			public class Bean {
+			   @Inject ExternalContext context;
+			}
+			javax.faces.application.NavigationHandler	
+			public class Bean {
+			   @Inject NavigationHandler handler;
+			}
+			javax.faces.context.Flash	
+			public class Bean {
+			   @Inject Flash flash;
+			}
 		
+			Nice: this means it will be possible to more easily provide mocked objects during unit and integration testing, 
+			and also simplify bean code in the application itself.
+			
 	6 - SeamSolder
 		- Explicar que  dividida em 3 partes
 		
@@ -221,20 +247,23 @@ especially around memory usage, with Weld 1.2 (which will be included in JBoss A
 		Problem 1: How to get a file?
 		
 			@Resource
-			ServletLifecycle.getServletContext().getRealPath("xml/atividades.xml");
+			ServletLifecycle.getServletContext().getRealPath("xml/atividades.xml"); - How to make tests? Mocks? Power Mocks
+			
 			X
-			Como testar isso????? mocar! mas como moco? manipulao de bytecode powermockito
+
 			@Inject
 			@Resource("WEB-INF/web.xml")
-			InputStreamwebXml
+			InputStream webXml
 
 				Any input stream injected, or created directly by the ResourceProvider is managed, and will be automatically
 				closed when the bean declaring the injection point of the resource or provider is destroyed.xAny input stream injected,
 				or created directly by the ResourceProvider is managed, and will be automatically closed when the bean declaring the 
 				injection point of the resource or provider is destroyed.
-				
+		
+		Problem 2:
+		
 		- HANDS ON
-		Dica rpida - @Inject Expressions - invocando mtodo
+		Fast Tip - @Inject Expressions - invoke method with E.L
 
 
 	7 - CDI's future
@@ -255,7 +284,7 @@ especially around memory usage, with Weld 1.2 (which will be included in JBoss A
 			An embedded mode allowing startup outside of a Java EE container
 			Bean declaration at constructor level
 			Static injection
-			Inclusion of @Unwraps from Seam Solder
+			Inclusion of @Unwraps from Seam Solder - bijection
 			Numerous minor enhancements to the Portable Extensions SPI
 			Client controlled contexts
 			Better support for CDI in libraries when used in the Java EE platform
@@ -265,18 +294,14 @@ especially around memory usage, with Weld 1.2 (which will be included in JBoss A
 	8 - Seam's Future
 
 		- Seam Reports, 
-		Seam Cache - https://github.com/gastaldi/seam-cache
-		Seam Social	
-		- https://issues.jboss.org/browse/SEAMCRON-21
-		
+		- Seam Cache - https://github.com/gastaldi/seam-cache
+		- Seam Social	
+		- Seam Cron - https://issues.jboss.org/browse/SEAMCRON-21
 
 		Gavin King (Project Founder)
 		Shane Bryzak (Project Lead)
 		Pete Muir (former Project Lead)
 		Dan Allen (Community Liaison)
-	
-	9 - Links Interessantes, github do projeto e pdf
-
 		
 		
 #seam-dev on irc.freenode.net - discusso sobre packing - 25/05
@@ -369,37 +394,36 @@ Shane
 
 
 
-
+		9 - Links Interessantes, github do projeto e pdf
 		
 		
-Palestra Links interessantes
-
-
-http://www.infoq.com/news/2011/02/muir_seam3
-
-http://torquebox.org/news/2011/06/13/torquebox-a-javaists-tutorial-on-messaging-services-and-cdi-in-ruby/
-
-migration notes - http://seamframework.org/Seam3/Seam2ToSeam3MigrationNotes
-
-http://download.oracle.com/javaee/6/tutorial/doc/gjivm.html
-
-http://hwellmann.blogspot.com/2010/11/cdi-major-risk-factor-in-java-ee-6.html
-http://hwellmann.blogspot.com/2010/12/glassfish-and-weld-new-builds-new-bugs.html 
-http://hwellmann.blogspot.com/2010/12/update-on-memory-issues-in-glassfish.html- problems
-
-http://relation.to/Bloggers/Seam300FinalReleased
-
-http://www.seamframework.org/Seam3/Compatibility - glassFish
-
-http://seamframework.org/Community/Seam23MigrationHowToStart - how to start migration
-
-http://relation.to/18358.lace - Conversation with CDI
-
-Conversation Problems -
-
-The problem was the spec, from what I've understood they couldn't all agree on how to treat some of the features 
-from Seam 2. Currently you can only have one conversation going at a time per session, and there is no nesting of 
-conversations. I believe the Seam Conversation module though address many of these issues.
+			Palestra Links interessantes
+			
+			http://www.infoq.com/news/2011/02/muir_seam3
+			
+			http://torquebox.org/news/2011/06/13/torquebox-a-javaists-tutorial-on-messaging-services-and-cdi-in-ruby/
+			
+			migration notes - http://seamframework.org/Seam3/Seam2ToSeam3MigrationNotes
+			
+			http://download.oracle.com/javaee/6/tutorial/doc/gjivm.html
+			
+			http://hwellmann.blogspot.com/2010/11/cdi-major-risk-factor-in-java-ee-6.html
+			http://hwellmann.blogspot.com/2010/12/glassfish-and-weld-new-builds-new-bugs.html 
+			http://hwellmann.blogspot.com/2010/12/update-on-memory-issues-in-glassfish.html- problems
+			
+			http://relation.to/Bloggers/Seam300FinalReleased
+			
+			http://www.seamframework.org/Seam3/Compatibility - glassFish
+			
+			http://seamframework.org/Community/Seam23MigrationHowToStart - how to start migration
+			
+			http://relation.to/18358.lace - Conversation with CDI
+			
+			Conversation Problems -
+			
+			The problem was the spec, from what I've understood they couldn't all agree on how to treat some of the features 
+			from Seam 2. Currently you can only have one conversation going at a time per session, and there is no nesting of 
+			conversations. I believe the Seam Conversation module though address many of these issues.
 
 
 

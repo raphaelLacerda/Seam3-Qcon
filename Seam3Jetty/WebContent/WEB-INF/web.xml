@@ -4,9 +4,11 @@
 	xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
 	id="WebApp_ID" version="2.5">
 	<display-name>QCon Seam3 Jetty</display-name>
+	
 	<welcome-file-list>
 		<welcome-file>index.xhtml</welcome-file>
 	</welcome-file-list>
+	
 	<servlet>
 		<servlet-name>Faces Servlet</servlet-name>
 		<servlet-class>javax.faces.webapp.FacesServlet</servlet-class>
@@ -16,15 +18,12 @@
 		<servlet-name>Faces Servlet</servlet-name>
 		<url-pattern>*.xhtml</url-pattern>
 	</servlet-mapping>
-	<context-param>
-		<param-name>com.sun.faces.writeStateAtFormEnd</param-name>
-		<param-value>true</param-value>
-	</context-param>
+	
+<!-- 	<context-param> -->
+<!-- 		<param-name>com.sun.faces.writeStateAtFormEnd</param-name> -->
+<!-- 		<param-value>true</param-value> -->
+<!-- 	</context-param> -->
 
-
-	<!-- <listener> -->
-	<!-- <listener-class>org.jboss.seam.faces.beanManager.BeanManagerServletContextListener</listener-class> -->
-	<!-- </listener> -->
 	<resource-env-ref>
 		<resource-env-ref-name>BeanManager</resource-env-ref-name>
 		<resource-env-ref-type>javax.enterprise.inject.spi.BeanManager</resource-env-ref-type>
