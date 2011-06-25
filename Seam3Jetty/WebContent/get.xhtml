@@ -1,0 +1,28 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:s="http://jboss.org/seam/faces">
+
+<ui:composition template="layout/template.xhtml">
+
+	<ui:define name="head">Livro22222</ui:define>
+	<ui:define name="body">
+
+		<f:metadata>
+
+			<f:viewParam name="id" value="#{livroMB.livro.id}" />
+
+			<ui:remove>
+				<f:event type="preRenderView" listener="#{livroMB.buscaLivro}" />
+			</ui:remove>
+			
+			<s:viewAction action="#{livroMB.buscaLivro}" />
+		</f:metadata>
+		
+		Livro encontrando #{livroMB.livro.id} - #{livroMB.livro.nome}
+	</ui:define>
+</ui:composition>
+
+</html>
