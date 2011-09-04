@@ -9,8 +9,11 @@
 	<ui:define name="head">Seam 3</ui:define>
 	<ui:define name="body">
 		<h:messages />
-		<h:outputText value="#{testeMB.hello}" />
 
+		<h:form>
+			<h:inputText value="#{livroMB.livro.nome}" />
+			<h:commandButton value="Adicionar" action="#{livroMB.montaLivro}" />
+		</h:form>
 	</ui:define>
 </ui:composition>
 

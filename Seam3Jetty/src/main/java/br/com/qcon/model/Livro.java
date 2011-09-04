@@ -4,9 +4,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 
-
 @Entity
-//@Cacheable(value = false)
 public class Livro {
 
 	@Id
@@ -38,13 +36,18 @@ public class Livro {
 		return nome;
 	}
 
+	public void setNome(String nome) {
+
+		this.nome = nome;
+	}
+
 	@Override
 	public String toString() {
 
 		if (this.nome != null) {
 			return "Livro: " + this.nome;
 		} else {
-			return "Livro ainda não foi criado";
+			return "Livro ainda n√£o foi criado";
 		}
 	}
 }

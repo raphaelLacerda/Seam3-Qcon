@@ -1,3 +1,9 @@
+TorqueBox - CDI com Ruby
+CDISource - Andy Gibson
+Enable developers to take advantage of CDI independently of Java EE.
+
+
+
 
 Pontos que posso falar sobre além de CDI com Seam 3
 
@@ -39,9 +45,10 @@ http://qconsp.com/palestra/raphael-lacerda/alem-do-cdi-com-seam-3
 
 
 - Apresentação
-	-- BM
+	-- BM - mother jsf
 	-- Bruno Borges after me - hates JSF - 10 reasons why you shoudn't pick for JSF
 	-- The presentation is done since may - where is gui? probably making his presentation
+	-- 
 	-- Special Thanks
 
 
@@ -52,7 +59,7 @@ SLIDES
 	1 - CDI - example
 		- CDI Architecture risks
 		
-			2010 - tests were no that good for Seam
+			2010 - tests were no that good for CDI
 			december - still bugs when i deploy
 			november - http://lists.jboss.org/pipermail/weld-dev/2010-November/002746.html
 			2010/2011 - update - no problems with heap - it's improving
@@ -111,6 +118,41 @@ These improvements are all included in Weld 1.1.0 (which is included in JBoss AS
 especially around memory usage, with Weld 1.2 (which will be included in JBoss AS 7). The eventual aim is for Weld to use around 1k per bean.
 
 
+		CDISource (30/03/2011) - Others opinions - http://java.dzone.com/articles/announcing-cdisource?utm_source=feedburner&utm_medium=feed&utm_campaign=Feed%3A+javalobby%2Ffrontpage+(Javalobby+%2F+Java+Zone)
+		
+		First Name: Andy
+		Last Name: Gibson
+		http://www.andygibson.net/blog/article/a-little-less-conversation/
+		http://jaxenter.com/cdi-without-java-ee-6-in-new-cdisource-project-35433.html
+		http://cdisource.org/site/
+		
+		
+		Our goal is to make CDI useful and usable on its own without Java EE 6, and to give developers the 
+		tools and information to do so. To let them write vendor neutral and portable code, and apply agile 
+		and best practices. Developers know how to write good software and don’t want to sacrifice that for 
+		the sake of using a framework to make things easier. To that end we aim to provide code and information 
+		that will help facilitate those practices.
+
+
+		Main goals
+		
+		Promote and facilitate the use of the Java Context and Dependency Injection (CDI) framework in relation to as many aspects of application development as possible.
+		Enable developers to take advantage of CDI independently of Java EE.
+		Provide lightweight, lean and agile access to the underlying CDI container as a core principle in our efforts.
+		Make testing easy without requiring a complex set of tools or complex deployment scenarios.
+		Enhance both Java EE development as well as the use of CDI in non Java EE application where possible.
+		Promote and enable the use of CDI in a vendor neutral environment and maximize the portability of application code across CDI implementations.
+		Not reject the ideas of Java EE but expand the usability of CDI outside the borders of Java EE application servers with frameworks that are not a part of the specification.
+		Not reject other CDI efforts but to provide another venue to promote those efforts. This is an addition. This is another voice in support of CDI.
+		
+		
+		Make a joke with the Ruby guys
+		- too late if you think you cant use cdi with Ruby
+		- how difficult it's when you just got the party and it ends..
+		- dont worry, i'll be here e make a community at orkut
+		- just kidding, functional programmig with Scala.. DSL Lambda
+		
+		
 	2 - JSF 2 - example
 		- Some new features: h:link, f:metadata, ViewScope, @ManagedBean, FlashScope
 	3 - Seam 3 Integration
@@ -141,7 +183,11 @@ especially around memory usage, with Weld 1.2 (which will be included in JBoss A
 					e se anotar uma classe??? at getter  chamado
 					will open another transaction if i call another method - REQUIRED NEW
 					
-				<interceptors>
+				
+			
+		-	HANDS ON
+		
+		<interceptors>
 			<class>org.jboss.seam.transaction.TransactionInterceptor</class>
 			</interceptors>
 			
@@ -149,21 +195,50 @@ especially around memory usage, with Weld 1.2 (which will be included in JBoss A
 					<s:modifies/>
 				</t:SeSynchronizations>
 		
+		Seam will attempt to use JTA synchronizations if possible. If not then you need to install 
+		the SeSynchronzations bean to allow seam to handle synchronizations manually. 
+		Synchronizations allow seam to respond to transaction events such as beforeCompletion() and 
+		afterCompletion(), and are needed for the proper operation of the Seam Managed Persistence Context.
+		
 				<t:EntityTransaction>
 					<s:modifies/>
 				</t:EntityTransaction>
-					- Need to explain this
+
+		By default seam will attempt to look up java:comp/UserTransaction from JNDI 
+		(or alternatively retrieve it from the EJBContext if a container managed transaction is active). 
+		Installing EntityTransaction tells seam to use the JPA EntityTransaction instead. 
+		To use this you must have a Seam Managed Persistence Context installed with qualifier @Default.				
 		
+
+		You should avoid EntityTransaction if you have more than one persistence unit in your application. 
+		Seam does not support installing multiple EntityTransaction beans, and the EntityTransaction interface 
+		does not support two phase commit, so unless you are careful you may have data consistency issues. 
+		If you need multiple persistence units in your application then we highly recommend using an EE 6 
+		compatible server, such as JBoss 6.
+		
+		Unlike EJBs, managed beans are not transactional by default, 
+		you can change this by adding the @TransactionAttribute to the bean class.						
+
+	
+		Unlike in Seam 2, transactions will not roll back whenever a non-application exception propagates out of a bean,
+		unless the bean has the transaction intercepter enabled.
+
+		If you are using seam managed transactions as part of the seam-faces module you do not need to worry 
+		about declarative transaction management. Seam will automatically start a transaction for you at the start 
+		of the faces request, and commit it before the render response phase.		
+		
+		@SeamApplicationException will not control transaction rollback when using EJB container managed 
+		transactions. If you are in an EE environment then you should always use the EJB API's, namely 
+		@TransactionAttribute and @ApplicationException.
+		
+				
 			- @Transactional suporta tbm @TransactionAttribute
 			- REquires_new e notSupported nao funciona
 				- it was supposed to work on final version 1.0.0, but not!
-				
-			Vai usar JTA se estiver disponvel - permite o Seam lidar manualmente - 
-			http://docs.jboss.org/seam/3/persistence/latest/reference/en-US/html/persistence.html#persistence.seam-managed-persistence-contexts
-		
+
 			- EntityTransaction X JTA - two phase commit -> what i'll say here???/
 			
-		-	HANDS ON
+			
 		-	Citar apenas - dica rapida - colocar a figura de alguem correndo (eu?moreira? gui?)
 			Useruser=em.createQuery("fromUserwhereusername=#{user.username}").getSingleResult();
 	
@@ -185,15 +260,7 @@ especially around memory usage, with Weld 1.2 (which will be included in JBoss A
 								X	 			
 				<s:viewAction action="#{livroMB.buscaLivro}" />
 				
-				Advantages: 
-					It's lightweight	
-					It's timing can be controlled
-					It's contextual
-					It can trigger navigation
-				viewAction - fazer redirect para livro nao encontrado, com jsf puro nao rola
 			- I need more, rest/ friendly url: SEAM3/search/1
-				https://issues.jboss.org/browse/SEAMFACES-158
-				https://github.com/seam/faces/pull/26				
 		
 		Warning
 			The JSF 2 specification specifies that there must be at least one view parameter for the view metadata 
@@ -207,6 +274,27 @@ especially around memory usage, with Weld 1.2 (which will be included in JBoss A
 				Inject and choose scopes for Converters e Validators
 		
 		-	HANDS ON
+
+		Configs
+		<listener>
+
+		   <listener-class>org.jboss.seam.faces.beanManager.BeanManagerServletContextListener</listener-class>
+		
+		</listener>
+
+		s:viewAction
+				
+		Advantages: 
+					It's lightweight	
+					It's timing can be controlled
+					It's contextual
+					It can trigger navigation
+				viewAction - fazer redirect para livro nao encontrado, com jsf puro nao rola
+
+		PrettyFaces
+				https://issues.jboss.org/browse/SEAMFACES-158
+				https://github.com/seam/faces/pull/26				
+				
 		-	Fast Tip:
 		 
 			@Inject Messages - keeps even after a redirect by default
@@ -240,7 +328,7 @@ especially around memory usage, with Weld 1.2 (which will be included in JBoss A
 
 			@Veto
 			@Requires
-			@Exact - alternativa para os qualifiers
+			
 			@Named no package
 			@FullyQualifiedNamed
 
@@ -262,9 +350,15 @@ especially around memory usage, with Weld 1.2 (which will be included in JBoss A
 		
 		Problem 2:
 		
+			@Unwraps
+			@Exact
+			
+			Typed Log
+				- 
 		- HANDS ON
-		Fast Tip - @Inject Expressions - invoke method with E.L
-
+		
+		-	Fast Tip - @Inject Expressions- @Inject Expressions - invoke method with E.L
+			@Exact - alternativa para os qualifiers
 
 	7 - CDI's future
 	
@@ -295,8 +389,32 @@ especially around memory usage, with Weld 1.2 (which will be included in JBoss A
 
 		- Seam Reports, 
 		- Seam Cache - https://github.com/gastaldi/seam-cache
+		http://www.infoq.com/news/2011/08/jcache-jsr-lives
+		
+		Greg went on to say that Java EE 7 is targeted at the cloud, and spec leads see the value 
+		of including caching. The reasoning: once a developer starts using caching to solve performance issues
+		they see its value. Then developers, endowed with an appreciation for caching, start adding caching to 
+		new projects and solutions at the start instead of waiting for performance issues.
+		
+			NoSQL / EhCache/ MemCached -> different ways to solve the same problema: scalability
+			
+		There are many vendors currently implementing or planning on implementing JCache including Terracotta, 
+		Oracle, JBoss, Caucho, IBM, Google App Engine and others as caching seems to be more and more a given component
+		of enterprise and cloud solutions.
+		
+		There seemed to be some controversy around JSR-107 versus JSR-347 a few months back. JSR-347 is the Data Grid JSR.
+		
+		InfoQ: What if any overlap does JSR-107 have with JSR-347? Where does JSR-107 stop and where does JSR-347 start?
+		
+		JSR-347 is defined as a superset of JSR-107 (it has a dependency on JSR-107) that adds additional 
+		Data Grid features. JSR-107 is being carefully designed to work very well for both standalone caches and 
+		distributed caches irrespective of the topology for implementation of the distributed cache. 
+		With JSR-107 nearing completion we expect that this will help JSR-347 to define itself.
+
+
 		- Seam Social	
 		- Seam Cron - https://issues.jboss.org/browse/SEAMCRON-21
+		- Seam 3 Bridge
 
 		Gavin King (Project Founder)
 		Shane Bryzak (Project Lead)
@@ -394,6 +512,21 @@ Shane
 
 
 
+
+
+
+
+
+
+
+Snowdrop guy(s) here :). I discussed this with Shane previously. By and large, there are two things that you can consider for this integration:
+
+- blanket Spring/CDI integration - this can live inside of Seam or outside (e.g Snowdrop or something else);  I started a Spring/Seam module a while ago, but never got to finalize it properly, and there is also the CDISource stuff. Right now, I need to find a way to combine them as I believe that the integration must go deeper than bootstrapping and resolution by name/type: e.g. events/observers, qualifier handling etc.
+- specific Seam integration - bridging Spring with Seam 3 specifically, and its various modules - e.g. transactions, persistence, qualifiers;
+
+My plan was to work on this (at least the Spring/CDI part) after AS7 is released - basically in July/August. I needed to focus on supporting Snowdrop proper on AS7 first :). 
+
+
 		9 - Links Interessantes, github do projeto e pdf
 		
 		
@@ -418,7 +551,10 @@ Shane
 			http://seamframework.org/Community/Seam23MigrationHowToStart - how to start migration
 			
 			http://relation.to/18358.lace - Conversation with CDI
+		
+			http://java.dzone.com/articles/cdi-di-p1
 			
+				
 			Conversation Problems -
 			
 			The problem was the spec, from what I've understood they couldn't all agree on how to treat some of the features 
@@ -428,3 +564,296 @@ Shane
 
 
 		
+		
+		
+		
+		
+		
+	--------------------
+	
+	
+	Seam 3 Cron
+	
+	
+		from	Martin Kouba mkouba@redhat.com via lists.jboss.org 
+to	Seam Mailing List <seam-dev@lists.jboss.org>
+date	Mon, Aug 8, 2011 at 2:03 PM
+subject	[seam-dev] Seam Cron module
+mailing list	seam-dev.lists.jboss.org Filter messages from this mailing list
+mailed-by	lists.jboss.org
+unsubscribe	Unsubscribe from this mailing-list
+hide details 2:03 PM (21 minutes ago)
+Hi!
+
+Recently I tested Seam Cron module, especially scheduling features. From my point of view Seam Cron module (as well as Seam 2) is still not usable for quite common scheduling scenarios. Below are some comments/observations/suggestions - most of them come from real app needs and are closely related to quartz because I used this lib in many JEE apps before.
+
+In any case I don't want to criticize but make Seam 3 more useful  :-) ! If needed I can offer some help.
+
+* Seam Cron has fixed quartz configuration (no way to change it); this is not a good idea and will surely limit module user (QUARTZ - org.jboss.seam.cron.scheduling.quartz.QuartzScheduleProvider)
+* I'm missing operations on scheduler; e.g. send event to pause or resume all jobs (API)
+* job observers "may be/and may inject" @Dependant or @ApplicationScoped beans only; sometimes its very useful to reuse request scoped components - e.g. inject service used also from GUI (API/QUARTZ, in weld/quartz this could be accomplished with org.quartz.JobListener and org.jboss.weld.context.bound.BoundRequestContext)
+* it's not possible to schedule jobs dynamically - for instance first get definitions (DB, XML, WS) and then schedule them (API, maybe schedule job by firing some special event)
+* fired jobs are always stateless; sometimes its very practical to have stateful jobs / implement org.quartz.StatefulJob (API, QUARTZ - org.jboss.seam.cron.scheduling.quartz.TriggerJob implements org.quartz.Job)
+* trigger may contain next fire time info - sometimes very practical to know (API - org.jboss.seam.cron.api.scheduling.Trigger)
+* finally is there a reason not to use new stable versions of quartz, e.g. 1.8.x or 2.0.x? 
+
+Martin
+
+
+
+
+
+
+
+
+
+--------------------
+Shane has announced 3.1 e asked for feedbacks from de Seam Leads (at least beta)
+-------------------
+
+	from	Shane Bryzak sbryzak@redhat.com via lists.jboss.org 
+to	"seam-dev@lists.jboss.org" <seam-dev@lists.jboss.org>
+date	Sun, Jul 24, 2011 at 8:33 PM
+subject	[seam-dev] 3 weeks until Seam 3.1 Beta1
+mailing list	seam-dev.lists.jboss.org Filter messages from this mailing list
+mailed-by	lists.jboss.org
+unsubscribe	Unsubscribe from this mailing-list
+hide details Jul 24
+Just a heads up to everyone that we only have 3 weeks remaining until
+the beta 1 release for Seam 3.1.  It would be appreciated if all module
+leads could reply to this with a status update for your module, and
+whether you foresee any issues with delivering a beta for your module
+within this timeframe.
+
+I'd also like to remind everyone that we are getting rid of the shaded
+(combined) jars, so if you need assistance in doing this for your module
+please let me know and I can help out.
+
+Shane
+
+
+**Reports ( George Gastaldi): Seam reports is alpha1 but quite stable to be a beta
+
+**Social (Antoine Sabot-Durant: Seam social is in alpha1, but API are now stable enough to enter in beta. 
+This also necessary to add my OAuth contribution to Seam security.
+
+**Cron (Peter Royle) - its not gonna be possible
+
+** (George Gastaldi)
+Shane,
+
+I remember also in some discussion ago the creation of Seam Transactions module, which means the decoupling of Seam Persistence.
+
+How´s the status on that ? Is it scheduled for this version also ?
+
+Regards,
+
+Shane -> Yes, I'll hopefully be doing the split this week.
+
+
+
+
+
+Seam 3 brigde
+
+
+------------------------------------
+Seam 3 brigde
+------------------------------------- 
+
+
+from	Pete Muir pmuir@redhat.com via lists.jboss.org 
+to	Antoine Sabot-Durand <antoine@sabot-durand.net>
+cc	seam-dev@lists.jboss.org
+date	Wed, Jun 29, 2011 at 11:09 AM
+subject	Re: [seam-dev] Don't we need a Seam - Spring module ?
+mailing list	seam-dev.lists.jboss.org Filter messages from this mailing list
+mailed-by	lists.jboss.org
+unsubscribe	Unsubscribe from this mailing-list
+hide details 11:09 AM (4 minutes ago)
+Yes, we should do this :-)
+
+Marius is the owner.
+
+On 29 Jun 2011, at 14:28, Antoine Sabot-Durand wrote:
+
+> Hi Team,
+>
+> 3 weeks ago I started a consulting mission in a big Insurance company that is Redhat / JBoss customer. 
+They use most of Java EE 5 implementation provided by JBoss 5 EAP except for EJB 3. No EJB because it's also a Spring Shop. 
+One of my missions is to help them to build their next official stack based on JBoss EAP 6 (which should be out in January). 
+So I try to promote full Java EE 6 stack (with CDI and EJB 3.1) and put Spring aside as an alternative/Legacy framework. 
+But it won't work if they don't have a supported solution to use their old Spring components / Knowledge in this new stack.
+> More globally one big objection I encounter very often with the adoption of CDI (at least in France)  is investment done in Spring. 
+So if we want to facilitate the adoption we have to provide a Bridge with Spring to allow devs to integrate the "de facto standard" in the "official standard".
+> I know that Rick Hightower and CDISource Team wrote a nice extension on the subject (https://github.com/CDISource/cdisource) but I think such a module should be endorsed by a company that'll provide support on it like RH.
+> Seam 2 provided this Bridge so it seems normal to provide it as well in Seam 3.
+> What is your opinion ?
+>
+> Thanks,
+>
+> --
+> Antoine Sabot-Durand
+>
+> _______________________________________________
+> seam-dev mailing list
+> seam-dev@lists.jboss.org
+> https://lists.jboss.org/mailman/listinfo/seam-dev
+
+
+
+
+
+
+
+
+
+
+
+Seam 2 -> Seam 3 Strategy
+--------------------------
+-------------------------
+
+
+from	Lincoln Baxter, III lincolnbaxter@gmail.com via lists.jboss.org 
+to	forge-dev List <forge-dev@lists.jboss.org>,
+Seam Dev List <seam-dev@lists.jboss.org>,
+Rodney Russ <rdruss@gmail.com>
+date	Thu, Aug 11, 2011 at 6:26 PM
+subject	[seam-dev] Seam 2 -> Seam 3 Migration Strategy
+mailing list	seam-dev.lists.jboss.org Filter messages from this mailing list
+mailed-by	lists.jboss.org
+unsubscribe	Unsubscribe from this mailing-list
+	Important mainly because of the words in the message.
+hide details Aug 11 (10 days ago)
+Hi Guys,
+
+I'd like to start implementing a Seam 2 -> Seam 3 plugin for Forge, so that we can give people *Something* to get started with this process. My vision at this point is to specify a list of tasks for the plugin to perform, E.g.
+ 
+ -Updating the POM to include new dependencies
+ -Replacing Seam 2 annotations with Seam 3 annotations
+ -Getting basic configuration files set up
+ -Doing some static code analysis in order to print a list of tasks that need to be done by hand (sort of a "what do I have left?")
+
+
+In order to accomplish this, having never used Seam 2, I need a few things:
+A list of APIs and which Seam 3 feature replaces it - this includes annotations, static classes, and injected interfaces/classes.
+A test project with all of these features (or at least a lot of them.)
+As soon as I have these things, I will get started, and anyone who wants to help out and work on this as well is more than welcome to join me!
+
+
+
+
+
+
+
+
+
+===================
+
+
+
+
+
+
+
+
+
+Seam Mail
+
+------------
+----------
+
+from	Shane Bryzak sbryzak@redhat.com via lists.jboss.org 
+to	Cody Lerum <cody.lerum@gmail.com>
+cc	"seam-dev@lists.jboss.org" <seam-dev@lists.jboss.org>
+date	Sun, Aug 14, 2011 at 8:06 PM
+subject	[seam-dev] Seam Mail review
+mailing list	seam-dev.lists.jboss.org Filter messages from this mailing list
+mailed-by	lists.jboss.org
+unsubscribe	Unsubscribe from this mailing-list
+hide details Aug 14 (7 days ago)
+Hi Cody,
+
+I've just spent some time going over Seam Mail and preparing it for the
+release, however I've discovered a number of items that I think still
+need some work before it can go out:
+
+1) Seam mail core - I think that the core module should be removed and
+this should just become seam-mail-api, and (possibly, I'll get back to
+this shortly) seam-mail (the implementation).  This would bring the
+module into conformity with other modules that follow a similar
+structure of one api, multiple implementations.
+
+2) Evaluate whether the sub-module currently called
+seam-module-core-impl is necessary.  It seems to me that this contains
+classes that the user might use directly, in which case they should go
+into the API module.  If they are classes that don't actually belong in
+the API, then maybe a submodule called seam-mail-common might make more
+sense if they are implementation classes common to both the Velocity and
+Freemarker implementations.
+
+3) The implementations need a minor restructure - the impl directory in
+both the Freemarker and Velocity implementations is redundant, these
+submodules can go directly in their respective sub-dirs.  Also, the
+artifacts should be renamed to seam-mail-freemarker and seam-mail-velocity.
+
+4) The seam-render sub-module.  What is this for exactly?  It only
+contains one class, RenderTemplate - can this go into the impl or
+seam-mail-common perhaps?
+
+5) The distribution is broken.  Running mvn clean install -Drelease
+produces a distribution archive that seems to be missing a whole bunch
+of stuff, including the actual project artifacts.
+
+If anyone is able to help Cody out with these items it would be greatly
+appreciated, as I know he little spare time to spend on the mail module
+at the moment.  Likewise, I have my hands tied up with the release right
+now so if we're going to get the mail module into the 3.1.0.Beta1
+release then we'll need a kind volunteer to help out with it.
+
+Thanks,
+Shane
+_______________________________________________
+seam-dev mailing list
+seam-dev@lists.jboss.org
+https://lists.jboss.org/mailman/listinfo/seam-dev
+
+
+
+
+
+
+-------------------------\-
+-------------------------\-
+-------------------------\-
+
+3.1.0 - Beta 2 released
+
+
+	from	Shane Bryzak sbryzak@redhat.com via lists.jboss.org 
+to	"seam-dev@lists.jboss.org" <seam-dev@lists.jboss.org>
+date	Tue, Aug 30, 2011 at 12:58 AM
+subject	[seam-dev] Seam 3.1.0.Beta2 released
+mailing list	seam-dev.lists.jboss.org Filter messages from this mailing list
+mailed-by	lists.jboss.org
+unsubscribe	Unsubscribe from this mailing-list
+	Important mainly because of the words in the message.
+hide details Aug 30 (1 day ago)
+I'm happy to announce that the 3.1.0.Beta2 release is now complete, and
+all modules have had their artifacts released to the JBoss Nexus
+repository.  We won't be providing individual module distributions,
+however I will be building the bundled distribution over the next day
+and uploading to Sourceforge & docs.jboss.org.
+
+There is presently no concrete date for the CR1 release, we will now be
+concentrating on testing Beta2, identifying blocker issues and
+finalising the standard structure for module test suites, and general
+quality checking / cleaning up of the modules.  Once these items are
+addressed then we'll announce the CR1 release date.
+
+Thanks everyone for all the great work you've done for this release,
+it's nice to see the level of polish in Seam increase, and see the
+addition of a number of exciting new modules.
+
+Shane

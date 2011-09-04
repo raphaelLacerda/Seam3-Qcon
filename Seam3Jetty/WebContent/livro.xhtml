@@ -6,17 +6,14 @@
 
 <ui:composition template="layout/template.xhtml">
 
-	<h:messages/>
 	<ui:define name="head">Livro</ui:define>
 	<ui:define name="body">
 
 		<h:outputText value="#{livroMB.livro}" />
-		<h:outputText value="meu flash livro #{flash.livroFlash}" />
 
 		<h:form>
 
 			<h:commandButton value="Monta Livro" action="#{livroMB.montaLivro}" />
-			<h:commandButton value="Atualiza" action="#{livroMB.atualiza('Rafa')}" />
 		</h:form>
 
 	</ui:define>

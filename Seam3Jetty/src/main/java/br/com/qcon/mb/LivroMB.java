@@ -1,9 +1,12 @@
 package br.com.qcon.mb;
 
 import javax.enterprise.inject.Model;
-import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
+import org.jboss.logging.Logger;
+import org.jboss.seam.international.status.Messages;
+import org.jboss.seam.solder.logging.Category;
+import br.com.qcon.log.LivroLogger;
 import br.com.qcon.model.Endereco;
 import br.com.qcon.model.Livro;
 
@@ -14,18 +17,28 @@ public class LivroMB {
 	private Endereco		endereco	= new Endereco();
 
 	@Inject
-	private FacesContext	facesContext;
+	private Messages		messages;
 	@Inject
 	private EntityManager	em;
 
-	//testar JBoSS EL
+	@Inject
+	@Category("livro")
+	private LivroLogger		log;
+
+	@Inject
+	private Logger			logger;
+
 	public void montaLivro() {
 
-		livro = new Livro("Livro do Rafa");
 
-		//		flash.putNow("livroFlash", livro);
-		//		flash.keep("livroFlash");
-		facesContext.getExternalContext().getFlash().setKeepMessages(true);
+		em.persist(livro);
+		//mencionar artigo no blog, DI em generic DAOs
+		
+		log.livroAdicionado(livro);
+		log.livroRemovido(livro);
+		logger.info("logger funcionando - um livro foi adicionado");
+
+		messages.info("Um livro {0} foi salvo com sucesso", livro);
 	}
 
 	public void atualiza(String a) {
@@ -40,14 +53,4 @@ public class LivroMB {
 		return livro;
 	}
 
-	public Endereco getEndereco() {
-
-		return endereco;
-	}
-
-	public void buscaLivro() {
-
-		System.out.println("indo buscar o livro" + livro.getId());
-		this.livro = em.find(Livro.class, livro.getId());
-	}
 }
