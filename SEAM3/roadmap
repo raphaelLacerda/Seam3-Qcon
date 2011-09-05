@@ -95,7 +95,7 @@ SLIDES
 			
 			WishList
 			
-			All in all, if you want to work with Java EE 6, there is currently no way around Weld. And until Weld reaches production quality, 
+			All in axll, if you want to work with Java EE 6, there is currently no way around Weld. And until Weld reaches production quality, 
 			the only way to build production quality applications on Java EE 6 is to avoid using CDI.
 
 			Free and Open Source Software is all about choice - so I would really love to see a pluggable CDI provider interface that would 
@@ -163,7 +163,7 @@ especially around memory usage, with Weld 1.2 (which will be included in JBoss A
 		
 		
 	2 - JSF 2 - example
-		- Some new features: h:link, f:metadata, ViewScope, @ManagedBean, FlashScope
+		- Some new features: h:link, f:metadata, ViewScope, @ManagedBean, FlashScope, navegação
 	3 - Seam 3 Integration
 		- Show a picture - http://seamframework.org/Seam3/Architecture
 	4 - Seam Persistence

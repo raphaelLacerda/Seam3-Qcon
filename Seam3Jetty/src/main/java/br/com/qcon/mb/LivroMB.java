@@ -20,7 +20,7 @@ public class LivroMB {
 	@Inject
 	private Logger			logger;
 
-	public void montaLivro() {
+	public void cadastrar() {
 
 		em.persist(livro);
 		//mencionar artigo no blog, DI em generic DAOs
