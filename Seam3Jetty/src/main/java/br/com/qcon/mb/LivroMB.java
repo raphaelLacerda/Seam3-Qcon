@@ -5,16 +5,12 @@ import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import org.jboss.logging.Logger;
 import org.jboss.seam.international.status.Messages;
-import org.jboss.seam.solder.logging.Category;
-import br.com.qcon.log.LivroLogger;
-import br.com.qcon.model.Endereco;
 import br.com.qcon.model.Livro;
 
 @Model
 public class LivroMB {
 
-	private Livro			livro		= new Livro();
-	private Endereco		endereco	= new Endereco();
+	private Livro			livro	= new Livro();
 
 	@Inject
 	private Messages		messages;
@@ -22,35 +18,26 @@ public class LivroMB {
 	private EntityManager	em;
 
 	@Inject
-	@Category("livro")
-	private LivroLogger		log;
-
-	@Inject
 	private Logger			logger;
 
 	public void montaLivro() {
 
-
 		em.persist(livro);
 		//mencionar artigo no blog, DI em generic DAOs
-		
-		log.livroAdicionado(livro);
-		log.livroRemovido(livro);
+
 		logger.info("logger funcionando - um livro foi adicionado");
-
 		messages.info("Um livro {0} foi salvo com sucesso", livro);
-	}
-
-	public void atualiza(String a) {
-
-		System.out.println(a);
-		System.out.println(endereco);
-		System.out.println("atualizando");
 	}
 
 	public Livro getLivro() {
 
 		return livro;
+	}
+
+	public void buscaLivro() {
+
+		System.out.println("indo buscar o livro" + livro.getId());
+		this.livro = em.find(Livro.class, livro.getId());
 	}
 
 }
