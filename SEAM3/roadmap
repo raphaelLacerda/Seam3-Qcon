@@ -133,6 +133,15 @@ especially around memory usage, with Weld 1.2 (which will be included in JBoss A
 		the sake of using a framework to make things easier. To that end we aim to provide code and information 
 		that will help facilitate those practices.
 
+		While creating TorqueBox, we realized that we are serving two distinct (but possibly overlapping) audiences:
+
+			Rubyists looking for a great deployment platform
+			JavaEE developers looking to try Ruby
+
+		so diz que injecao pode nao ser considerada necessaria pra quem usa ruby
+		mas no caso de uma integracao com um sistema java
+		ela torna o codigo mais legivel, limpo transparente no uso do jruby
+
 
 		Main goals
 		
@@ -241,7 +250,9 @@ especially around memory usage, with Weld 1.2 (which will be included in JBoss A
 			
 		-	Citar apenas - dica rapida - colocar a figura de alguem correndo (eu?moreira? gui?)
 			Useruser=em.createQuery("fromUserwhereusername=#{user.username}").getSingleResult();
-	
+
+		- BUG no jboss 7 https://issues.jboss.org/browse/SEAMPERSIST-57
+			
 	5 - Seam Faces
 		Problem 1: how to search for a book?
 			- book.xhtml?id=3			
@@ -293,6 +304,7 @@ especially around memory usage, with Weld 1.2 (which will be included in JBoss A
 
 		PrettyFaces
 				https://issues.jboss.org/browse/SEAMFACES-158
+				http://seamframework.org/Community/SeamfacesWithTomcat
 				https://github.com/seam/faces/pull/26				
 				
 		-	Fast Tip:
