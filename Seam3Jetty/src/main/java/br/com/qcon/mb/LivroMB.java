@@ -5,6 +5,8 @@ import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import org.jboss.logging.Logger;
 import org.jboss.seam.international.status.Messages;
+import org.jboss.seam.transaction.TransactionPropagation;
+import org.jboss.seam.transaction.Transactional;
 import br.com.qcon.model.Livro;
 
 @Model
@@ -20,6 +22,7 @@ public class LivroMB {
 	@Inject
 	private Logger			logger;
 
+	@Transactional(TransactionPropagation.REQUIRED)
 	public void cadastrar() {
 
 		em.persist(livro);
