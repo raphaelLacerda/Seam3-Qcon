@@ -3,7 +3,6 @@
     <wb-module deploy-name="SEAM3">
         <wb-resource deploy-path="/" source-path="/WebContent"/>
         <wb-resource deploy-path="/WEB-INF/classes" source-path="/src/main/java"/>
-        <wb-resource deploy-path="/WEB-INF/classes" source-path="/src/test/java"/>
         <property name="context-root" value="Seam3_-_QCon"/>
         <property name="java-output-path" value="/Seam3 - QCon/build/classes"/>
     </wb-module>

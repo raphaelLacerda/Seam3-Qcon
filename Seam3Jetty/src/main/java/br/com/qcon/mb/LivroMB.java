@@ -34,7 +34,7 @@ public class LivroMB {
 		return livro;
 	}
 
-	public void buscaLivro() {
+	public void buscar() {
 
 		System.out.println("indo buscar o livro" + livro.getId());
 		this.livro = em.find(Livro.class, livro.getId());
