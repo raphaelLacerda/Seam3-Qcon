@@ -26,4 +26,5 @@ public class RecursoMB {
 		System.out.println(webXml);
 	}
 
+
 }
