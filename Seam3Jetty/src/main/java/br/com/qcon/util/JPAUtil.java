@@ -10,7 +10,7 @@ public class JPAUtil {
 
 	@PersistenceUnit(unitName="seam3")
 	@Produces
-	@RequestScoped
 	@ExtensionManaged
-	EntityManagerFactory	entityManagerFactory;
+	@RequestScoped
+	EntityManagerFactory entityManagerFactory;
 }

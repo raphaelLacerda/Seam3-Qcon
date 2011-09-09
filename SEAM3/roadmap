@@ -133,6 +133,9 @@ especially around memory usage, with Weld 1.2 (which will be included in JBoss A
 		the sake of using a framework to make things easier. To that end we aim to provide code and information 
 		that will help facilitate those practices.
 
+		http://www.adam-bien.com/roller/abien/entry/java_ee_6_migrations_with
+		It is like working with two JPA providers (e.g. EclipseLink and Hibernate) in one application at the same time :-).
+
 		While creating TorqueBox, we realized that we are serving two distinct (but possibly overlapping) audiences:
 
 			Rubyists looking for a great deployment platform
@@ -385,6 +388,8 @@ especially around memory usage, with Weld 1.2 (which will be included in JBoss A
 			explore the correct solution left for a later date, and, of course, some unexpected issues. CDI 1.1 aims to address these rough spots,
 			 as well as to standardize a few of the most popular extensions the community has built. We don't plan to add any major 
 			new areas of functionality. A few of the things you can expect include:
+			
+			
 			Global ordering of interceptors and decorators, as well as global enablement of alternatives
 			An API for managing built in contexts, allowing the built in implementation of the conversation context to be used outside of JSF
 			An embedded mode allowing startup outside of a Java EE container
@@ -543,6 +548,8 @@ My plan was to work on this (at least the Spring/CDI part) after AS7 is released
 		
 		
 			Palestra Links interessantes
+			
+			http://www.adam-bien.com/roller/abien/entry/ride_the_lightning_java_ee
 			
 			http://www.infoq.com/news/2011/02/muir_seam3
 			
